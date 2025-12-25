@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Three-Tier App</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        #status { padding: 10px; margin: 20px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>DevOps Project Frontend 🚀</h1>
+    <div id="status">Checking Backend Status...</div>
+
+    <script>
+        // We will change this URL later when we deploy to Kubernetes
+        const BACKEND_URL = "/api/health"; 
+
+        fetch(BACKEND_URL)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('status').innerText = 
+                    `Backend Status: ${data.status} | Database: ${data.database}`;
+            })
+            .catch(err => {
+                document.getElementById('status').innerText = "Cannot reach Backend ❌";
+            });
+    </script>
+</body>
+</html>

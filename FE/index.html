@@ -1,29 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Three-Tier App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three-Tier GitOps App</title>
     <style>
-        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
-        #status { padding: 10px; margin: 20px; border: 1px solid #ccc; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            margin-top: 100px; 
+            background-color: #f4f7f6;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        #status { 
+            padding: 15px; 
+            margin-top: 20px; 
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            background-color: #fff;
+        }
+        .loading { color: #888; }
+        .success { color: #28a745; border-color: #28a745 !important; }
+        .error { color: #dc3545; border-color: #dc3545 !important; }
     </style>
 </head>
 <body>
-    <h1>DevOps Project Frontend 🚀</h1>
-    <div id="status">Checking Backend Status...</div>
+    <div class="container">
+        <h1>Three-Tier Devops Project </h1>
+        <p>ArgoCD + EKS + GitHub Actions</p>
+        <div id="status" class="loading">Connecting to API...</div>
+    </div>
 
     <script>
-        // We will change this URL later when we deploy to Kubernetes
+        // Because of our Ingress rule, we use a relative path.
+        // The browser will automatically request: http://your-elb-url/api/health
         const BACKEND_URL = "/api/health"; 
 
-        fetch(BACKEND_URL)
-            .then(res => res.json())
-            .then(data => {
-                document.getElementById('status').innerText = 
-                    `Backend Status: ${data.status} | Database: ${data.database}`;
-            })
-            .catch(err => {
-                document.getElementById('status').innerText = "Cannot reach Backend ❌";
-            });
+        async function checkConnection() {
+            const statusDiv = document.getElementById('status');
+            try {
+                const response = await fetch(BACKEND_URL);
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const data = await response.json();
+                
+                // Updates UI with real data from your Node.js backend
+                statusDiv.innerText = `Backend: ${data.status.toUpperCase()} ✅ | Database: ${data.database.toUpperCase()} 🗄️`;
+                statusDiv.className = "success";
+            } catch (err) {
+                statusDiv.innerText = "Cannot reach Backend via Ingress ❌";
+                statusDiv.className = "error";
+                console.error("Fetch error:", err);
+            }
+        }
+
+        // Run the check immediately
+        checkConnection();
     </script>
 </body>
 </html>

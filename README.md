@@ -81,6 +81,4 @@ Configuring complex networking and path-based routing in K8s.
 
 Infrastructure as Code (IaC) using eksctl.
 
-You're all set! Once you add this to your GitHub, your project is complete and ready to show the world.
 
-Is there anything else you need help with—maybe some interview tips for this project or ideas for a second project?

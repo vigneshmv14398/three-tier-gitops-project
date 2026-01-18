@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: backend-config
 data:
-  # This matches the Service name we gave to MongoDB in Task G
+  # This matches the Service name we gave to MongoDB 
   DB_URL: "mongodb://mongodb-service:27017/testdb"
   PORT: "5000"
 ---

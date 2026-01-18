@@ -1,7 +1,7 @@
 Three-Tier GitOps Project: EKS, ArgoCD, and GitHub Actions
 This project demonstrates a fully automated, production-ready Three-Tier Architecture deployed on Amazon EKS. It follows the GitOps philosophy, ensuring that the Git repository is the "single source of truth" for the infrastructure and application state.
 
-🏗️ Architecture Overview
+Architecture Overview
 Frontend: HTML5/JavaScript (Nginx) - Served via Ingress.
 
 Backend: Node.js API - Handles logic and DB connectivity.
@@ -14,7 +14,7 @@ GitOps: ArgoCD for automated synchronization between GitHub and K8s.
 
 Networking: Nginx Ingress Controller for cost-effective, path-based routing.
 
-🛠️ Tech Stack
+Tech Stack
 Cloud: AWS (EKS, ECR, IAM, VPC)
 
 Containerization: Docker
@@ -27,7 +27,7 @@ Automation: GitHub Actions
 
 Web Server: Nginx
 
-🚀 How to Run This Project
+How to Run This Project
 1. Prerequisites
 AWS CLI, kubectl, and eksctl installed.
 
@@ -57,20 +57,20 @@ Apply the manifests in the k8s-manifests/ directory.
 
 ArgoCD will automatically pull the images and deploy the pods.
 
-💰 Cost Optimization
+Cost Optimization
 To keep AWS costs minimal, this project uses:
 
 Managed Node Groups with t3.medium instances.
 
 Nginx Ingress Controller to route all traffic (Frontend and API) through a single AWS Load Balancer, avoiding the cost of multiple Elastic IPs.
 
-🧹 Cleanup
+Cleanup
 To avoid ongoing AWS charges, delete the resources with:
 
 Bash
 
 eksctl delete cluster --name three-tier-cluster --region ap-south-1
-👨‍💻 Key Skills Demonstrated
+Key Skills Demonstrated
 Automating CI/CD pipelines with GitHub Actions.
 
 Managing Kubernetes resources using declarative YAML manifests.

@@ -26,7 +26,7 @@ jobs:
     - name: Build & Push Backend
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: latest
+        IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $ECR_REGISTRY/backend-app:$IMAGE_TAG ./BE
         docker push $ECR_REGISTRY/backend-app:$IMAGE_TAG
@@ -34,7 +34,21 @@ jobs:
     - name: Build & Push Frontend
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: latest
+        IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $ECR_REGISTRY/frontend-app:$IMAGE_TAG ./FE
         docker push $ECR_REGISTRY/frontend-app:$IMAGE_TAG
+    - name: Update K8s Manifests
+      run: |
+        # This uses 'sed' to find the image line in your yaml and replace it with the new ECR path + SHA tag
+        sed -i "s|backend-app:latest|backend-app:${{ github.sha }}|g" k8s/Bend/backend-deploy.yaml
+        sed -i "s|frontend-app:latest|frontend-app:${{ github.sha }}|g" k8s/Fend/frontend-deploy.yaml
+
+    # NEW STEP: Push the changes back to Git so ArgoCD sees them
+    - name: Git Commit and Push
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add k8s/**/*.yaml
+        git commit -m "chore: update image tags to ${{ github.sha }} [skip ci]"
+        git push
